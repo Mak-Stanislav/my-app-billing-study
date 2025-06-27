@@ -1,10 +1,9 @@
-import { createRouteHandlerClient, SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { supabaseRouteHandlerClient } from "@/utils/supabaseRouteHandlerClient";
 import { NextRequest, NextResponse } from "next/server";
 import initiStripe from "stripe";
 
 export async function GET(req: NextRequest) {
-    const supabase = await createRouteHandlerClient({cookies});
+    const supabase = await supabaseRouteHandlerClient();
     const{ data } = await supabase.auth.getUser();
     const user = data.user;
 
@@ -18,7 +17,7 @@ export async function GET(req: NextRequest) {
     const stripe = new initiStripe(process.env.STRIPE_SECRET_KEY!);
 
     const session = await stripe.billingPortal.sessions.create({
-        customer: stripe_customer_data?.stripe_customer,
+        customer: stripe_customer_data?.stripe_customer!,
         return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`,
     });
 

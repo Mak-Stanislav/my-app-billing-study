@@ -1,22 +1,20 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-//import Image from "next/image";
-import { cookies } from "next/headers";
+import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
-//import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { supabaseServer } from "@/utils/supabaseSever";
 import { Database } from "@/lib/database.types";
 
-const supabase = createServerComponentClient<Database>({ cookies });
 
-const getAllsolutions = async () => {
-  //const { data: solutions, error } = await supabase.from("solutions").select("*");
+
+const getAllSolutions = async (supabase: SupabaseClient<Database>) => {
   const { data: solutions } = await supabase.from("solutions").select("*");
   return solutions;
 };
 
 
 export default async function Home() {
-  const solutions = await getAllsolutions();
+  const supabase = await supabaseServer();
+  const solutions = await getAllSolutions(supabase);
   
   //console.log(solutions);
   //console.log(error);

@@ -1,7 +1,7 @@
 import SubscriptionManagementButton from "@/components/checkout/SubscriptionManagementButton";
 import { Database } from "@/lib/database.types";
-import { createServerComponentClient, SupabaseClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { supabaseServer } from "@/utils/supabaseSever";
+import { SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import React from "react";
 
 const getProfileData = async (supabase: SupabaseClient<Database>) => {
@@ -12,7 +12,7 @@ const getProfileData = async (supabase: SupabaseClient<Database>) => {
 
 const Dashboard = async () => {
 
-    const supabase = await createServerComponentClient({cookies});
+    const supabase = await supabaseServer();
     const profile = await getProfileData(supabase);
 
     return (

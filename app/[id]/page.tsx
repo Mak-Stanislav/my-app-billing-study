@@ -1,32 +1,44 @@
 import React from 'react';
-import { createServerComponentClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Database } from '@/lib/database.types';
 import {YouTubeEmbed} from "@next/third-parties/google"
 import { extractYouTubeVideoId } from '@/utils/extractYoutubeVideoId';
+import { supabaseServer } from '@/utils/supabaseSever';
+import { NextRequest } from 'next/server';
 
 const getDetailSolution = async (id: number, supabase: SupabaseClient<Database>) => {
-    //const { data: solutions, error } = await supabase.from("solutions").select("*");
     const { data: solution } = await supabase.from("solutions").select("*").eq("id", id).single();
     return solution;
 };
 
 const getPremiumContent = async (id: number, supabase: SupabaseClient<Database>) => {
-    //const { data: solutions, error } = await supabase.from("solutions").select("*");
     const { data: content } = await supabase.from("premium_content").select("report_url").eq("id", id).single();
     return content;
 };
 
+interface Props {
+  params: Promise<{
+    id: number;
+  }>;
+}
 
-const SolutionDetailPage = async ({params}: {params: {id: number;};}) => {
-    const supabase = await createServerComponentClient<Database>({ cookies });
+const SolutionDetailPage = async ({ params }: Props) => {
+    //{ params }: { params: { id: number } }
+    const supabase = await supabaseServer();
+    const { id } = await params;
+
+    // const solution = await getDetailSolution(id, supabase);
+    // const content = await getPremiumContent(id, supabase);
     const [solution, content] = await Promise.all([
-        await getDetailSolution(params.id, supabase),
-        await getPremiumContent(params.id, supabase),
+        await getDetailSolution(id, supabase),
+        await getPremiumContent(id, supabase),
+    
     ]);
     
-    const vidoeId = extractYouTubeVideoId(content?.report_url as string) as string;
-    //console.log(content);
+    console.log(solution);
+    console.log(content);
+    
+    const vidoeId = extractYouTubeVideoId(content?.report_url!) as string;
 
     return (
         <div className="w-full max-w-3xl mx-auto my-16 px-8">

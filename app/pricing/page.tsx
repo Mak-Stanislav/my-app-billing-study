@@ -3,6 +3,7 @@ import SubscriptionButton from "@/components/checkout/SubscriptionButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card";
 import { Database } from "@/lib/database.types";
+import { supabaseServer } from "@/utils/supabaseSever";
 import { createServerComponentClient, SupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
@@ -48,7 +49,7 @@ const getProfileData = async (supabase: SupabaseClient<Database>) => {
 
 
 const PricingPage = async () => {
-    const supabase = await createServerComponentClient({cookies});
+    const supabase = await supabaseServer();
     const {data: user} = await supabase.auth.getSession();
 
 
@@ -85,24 +86,7 @@ const PricingPage = async () => {
                             </Button>)}
                 </CardFooter>
             </Card>
-            ))}
-            
-
-            {/* 
-            <Card  className="shadow-md">
-                <CardHeader>
-                    <CardTitle> Year Plan </CardTitle>
-                    <CardDescription> Year </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p> 20000 yen / Year </p>
-                </CardContent>
-                <CardFooter>
-                    <Button> Subscribe </Button>
-                </CardFooter>
-            </Card>
-            */}
-    
+            ))}               
     </div>
     );
 };
