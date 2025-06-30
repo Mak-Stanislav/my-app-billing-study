@@ -38,13 +38,13 @@ const SolutionDetailPage = async ({ params }: Props) => {
     console.log(solution);
     console.log(content);
     
-    const vidoeId = extractYouTubeVideoId(content?.report_url!) as string;
+    const videoId = extractYouTubeVideoId(content?.report_url!) as string;
 
     return (
         <div className="w-full max-w-3xl mx-auto my-16 px-8">
             <h1 className="text-3xl mb-6">{solution?.name}</h1>
             <p className="mb-8">{solution?.description}</p>
-            <YouTubeEmbed height={400} videoid = {vidoeId} />
+            <YouTubeEmbed height={400} videoid = {videoId} />
             
         </div>
     );
