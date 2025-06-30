@@ -16,8 +16,9 @@ export async function POST(req: NextRequest) {
 
     const data = await req.json();
     const { id, email } = data.record;
-
-    //console.log(id, email);
+    
+    console.log("Create Stripe Customer: id_email");
+    console.log(id, email);
 
     const stripe = new initiStripe(process.env.STRIPE_SECRET_KEY!);
     const customer = await stripe.customers.create({
